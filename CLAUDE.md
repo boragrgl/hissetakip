@@ -15,8 +15,13 @@ Yanıtlar Türkçe. Kullanıcı: boragrgl. Commit author: `boragrgl <ibit_@hotma
 2. Yerleşik tarayıcıda https://www.isyatirim.com.tr/tr-tr/analiz/hisse/Sayfalar/Temel-Degerler-Ve-Oranlar.aspx sayfasını aç ve kodu `javascript_tool` ile çalıştır. Çıktı büyük olduğu için dosyaya kaydedilir. O dosyayı `veri.json` yap (bu dosya git'e girmez).
 3. `bash robot/calistir.sh veri.json`
 4. Önceki `raporlar/son-rapor.md` (git'teki hali) ile karşılaştır: kategori değişimleri, 10 puanı aşan potansiyel değişimleri, yeni mali dönemler.
-5. Commit ("veri: GG.AA.YYYY") ve `main`'e push.
+5. Commit ("veri: GG.AA.YYYY"), `git pull --rebase` (altın kaydı Action'ı da push ediyor) ve `main`'e push.
 6. Kullanıcıya kısa özet gönder. Hata olursa veri uydurma ve push yapma.
+
+## Site
+- `site/index.html` ana sayfadır: solda altın, sağda hisse özeti. `site/hisseler.html` hisse senetleri ekranıdır.
+- `src/worker.js` (Cloudflare Worker): `/api/altin` Altınkaynak'ın herkese açık servisinden (https://static.altinkaynak.com/public/Gold, bkz. altinkaynak.com/Araclar/Servisler) gram altın (GA), çeyrek (C) ve 22 ayar hurda (B_T) fiyatlarını 60 sn önbellekle döndürür.
+- Altın grafiği `site/data/altin-gecmis.json` dosyasından çizilir. `.github/workflows/altin.yml` 08:07–23:07 TR arası saatlik kayıt ekler (`robot/altin_kaydet.py`). Altınkaynak'ın arşiv uç noktası (eb.altinkaynak.com) kendi uygulama anahtarıyla çalışır, kullanılmaz. Geçmiş bu yüzden kendi kayıtlarımızla birikir.
 
 ## Teknik analiz (sonraki aşama)
 `sonuc.json` içindeki her hisseye şu alan eklenecek:

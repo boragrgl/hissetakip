@@ -14,6 +14,9 @@ Takip edilen BIST hisselerinin belirlenen temel analiz kriterlerinden geçip ge�
 2. **Analiz:** `bash robot/calistir.sh veri.json` komutu `yontem.md` kurallarını uygular. `site/data/sonuc.json`, `site/data/gecmis/GG.json` ve `raporlar/son-rapor.md` dosyalarını yazar.
 3. **Site:** `site/index.html` dosyası `data/sonuc.json` verisini okur. Cloudflare'de `wrangler.jsonc` ile statik site olarak yayınlanır. Telefonda "Ana ekrana ekle" ile uygulama gibi açılır.
 
+## Altın
+Ana sayfanın solunda Altınkaynak'tan canlı gram altın, çeyrek ve 22 ayar hurda fiyatları var (`/api/altin`, `src/worker.js`). Seçilen türün son 1 aylık grafiği de orada. Grafik, GitHub Actions'ın saatlik kaydettiği `site/data/altin-gecmis.json` dosyasından çizilir.
+
 ## Dosyalar
 
 | Dosya | Ne işe yarar |
@@ -24,7 +27,10 @@ Takip edilen BIST hisselerinin belirlenen temel analiz kriterlerinden geçip ge�
 | `robot/fetch_isyatirim.js` | Veri çekme kodu (tarayıcıda çalışır) |
 | `robot/calistir.sh` | Analiz, arşiv ve site verisi adımları |
 | `robot/build_site.py` | Veri gömülü tek dosyalık site üretir (Claude yan paneli için) |
-| `site/` | Yayınlanan site |
+| `site/index.html` | Ana sayfa (altın + hisse özeti) |
+| `site/hisseler.html` | Hisse senetleri ekranı |
+| `src/worker.js` | Canlı altın fiyatı uç noktası (`/api/altin`) |
+| `robot/altin_kaydet.py`, `.github/workflows/altin.yml` | Saatlik altın fiyat kaydı |
 | `raporlar/son-rapor.md` | Son günün metin raporu |
 
 _Kuralların mekanik uygulamasıdır; yatırım tavsiyesi değildir._

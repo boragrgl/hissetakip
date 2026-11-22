@@ -1,0 +1,35 @@
+name: Altın fiyat kaydı
+
+# Altınkaynak'ın herkese açık servisinden saatlik fiyat kaydı (grafik geçmişi).
+# 08:07–23:07 TR arası her saat (UTC 05–20).
+on:
+  schedule:
+    - cron: "7 5-20 * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: [".github/workflows/altin.yml", "robot/altin_kaydet.py"]
+
+permissions:
+  contents: write
+
+concurrency:
+  group: altin-kaydi
+  cancel-in-progress: false
+
+jobs:
+  kaydet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fiyatı kaydet
+        run: python3 robot/altin_kaydet.py site/data/altin-gecmis.json
+      - name: Değiştiyse gönder
+        run: |
+          if git diff --quiet; then echo "değişiklik yok"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data/altin-gecmis.json
+          git commit -m "altın: $(TZ=Europe/Istanbul date '+%d.%m.%Y %H:%M')"
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1

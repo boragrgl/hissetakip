@@ -11,7 +11,7 @@ os.makedirs(os.path.join(site, "data"), exist_ok=True)
 dst = os.path.join(site, "data", "sonuc.json")
 if os.path.abspath(src) != os.path.abspath(dst):
     shutil.copyfile(src, dst)
-html = open(os.path.join(site, "index.html"), encoding="utf-8").read()
+html = open(os.path.join(site, "hisseler.html"), encoding="utf-8").read()
 data = json.dumps(json.load(open(src, encoding="utf-8")), ensure_ascii=False).replace("</", "<\\/")
 html = html.replace("<script>\n{", "<script>window.__TA_DATA__=" + data + ";</script>\n<script>\n{", 1)
 open(os.path.join(site, "hisse-takip.html"), "w", encoding="utf-8").write(html)
