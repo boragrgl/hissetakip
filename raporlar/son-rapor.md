@@ -1,4 +1,4 @@
-# Temel Analiz Raporu — 22.11.2026
+# Temel Analiz Raporu — 23.11.2026
 
 Faiz ortamı: **yuksek** · Piyasa medyanı F/K 8,7, PD/DD 0,80, FAVÖK marjı %14,7
 
@@ -13,7 +13,6 @@ Faiz ortamı: **yuksek** · Piyasa medyanı F/K 8,7, PD/DD 0,80, FAVÖK marjı %
 | ASELS | İZLEME (BSA FIRSATI) | 327,00 | 122,63 | %-62 | %45 (GEÇTİ) | %47 (KALDI) | %55 (DENGELİ) | %31,1 (%25,8) | 74,6x |
 | THYAO | İZLEME (BSA FIRSATI) | 329,00 | 829,80 | %152 | %-3 (KALDI) | %159 (GEÇTİ) | %44 (DENGELİ) | %13,4 (%22,8) | 822,5x |
 | METRO | İZLEME (BSA FIRSATI) | 9,09 | 15,68 | %73 | %-53 (KALDI) | — (GEÇTİ) | %89 (GÜÇLÜ) | — (%14,7) | 15,2x |
-| AKBNK | VERİ YOK | 65,15 | | | | | | | |
 
 ## Notlar
 - **BNTAS** (Kimyasal Ürün, mali tablo 2026/9): Dönen varlıklar KVB'nin 2 katından fazla (ideal).
@@ -25,6 +24,5 @@ Faiz ortamı: **yuksek** · Piyasa medyanı F/K 8,7, PD/DD 0,80, FAVÖK marjı %
 - **ASELS** (Savunma, mali tablo 2026/9): Nakit + finansal yatırımlar KV finansal borcun yarısını karşılamıyor. Sektörde yeterli şirket yok; F/K için piyasa medyanı kullanıldı. Alınmaz; izlemede tut. Bedelli onayı sonrası sert düşüş = olası giriş noktası. Bedelsiz sermaye artışı potansiyeli yüksek (kaymaklı fıstık sarma).
 - **THYAO** (Havayolları ve Hizm., mali tablo 2026/9): KVB > dönen varlıklar: bedelli sermaye artışı riski. Alınmaz; izlemede tut. Bedelli onayı sonrası sert düşüş = olası giriş noktası. Bedelsiz potansiyeli çok yüksek: 'zirve kağıt, al yaslan' (kaymaklı fıstık sarma).
 - **METRO** (Holdingler, mali tablo 2026/9): KVB > dönen varlıklar: bedelli sermaye artışı riski. Kısa vadeli finansal borç yok. FAVÖK marjı %5541 çıktı (satışlar çok düşük); kârlılık maddesi değerlendirilemedi. Alınmaz; izlemede tut. Bedelli onayı sonrası sert düşüş = olası giriş noktası.
-- **AKBNK** (Bankacılık, mali tablo —): Sanayi formatında mali tablo yok (banka/sigorta/aracı kurum olabilir)
 
 _Bu rapor belirlenen kuralların mekanik uygulamasıdır; yatırım tavsiyesi değildir._

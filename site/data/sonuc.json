@@ -1,6 +1,6 @@
 {
  "meta": {
-  "asOf": "2026-11-22T20:40:14.023Z",
+  "asOf": "2026-11-22T21:16:48.711Z",
   "faiz_ortami": "yuksek",
   "piyasa": {
    "fk": 8.7,
@@ -472,17 +472,6 @@
     "FAVÖK marjı %5541 çıktı (satışlar çok düşük); kârlılık maddesi değerlendirilemedi.",
     "Alınmaz; izlemede tut. Bedelli onayı sonrası sert düşüş = olası giriş noktası."
    ]
-  },
-  {
-   "kod": "AKBNK",
-   "ad": "Akbank",
-   "sektor": "Bankacılık",
-   "fiyat": 65.15,
-   "fk": 5.3,
-   "pddd": 1,
-   "donem": "9/2026",
-   "hata": "Sanayi formatında mali tablo yok (banka/sigorta/aracı kurum olabilir)",
-   "karar": "VERİ YOK"
   }
  ]
 }

@@ -8,6 +8,7 @@ Kullanım: python3 temel_analiz.py <veri.json> [cikti_klasoru]
 """
 import json, sys, os, statistics
 from datetime import datetime
+from zoneinfo import ZoneInfo
 
 # ---------------- AYARLAR (yöntem eşikleri) ----------------
 CFG = {
@@ -213,7 +214,7 @@ def main():
     json.dump({"meta": meta, "sonuclar": res}, open(os.path.join(out, "sonuc.json"), "w", encoding="utf-8"),
               ensure_ascii=False, indent=1)
 
-    L = [f"# Temel Analiz Raporu — {datetime.fromisoformat(data['asOf'].replace('Z','+00:00')).strftime('%d.%m.%Y')}", "",
+    L = [f"# Temel Analiz Raporu — {datetime.fromisoformat(data['asOf'].replace('Z','+00:00')).astimezone(ZoneInfo('Europe/Istanbul')).strftime('%d.%m.%Y')}", "",
          f"Faiz ortamı: **{CFG['faiz_ortami']}** · Piyasa medyanı F/K {num(piyasa['fk'],1)}, PD/DD {num(piyasa['pddd'],2)}, FAVÖK marjı {pct(piyasa['favok'],1)}", "",
          "| Hisse | Karar | Fiyat | Hedef | Potansiyel | NİS fazla | Nakit karş. | Özkaynak/Varlık | FAVÖK marjı (sektör) | Özk/Sermaye |",
          "|---|---|---|---|---|---|---|---|---|---|"]
