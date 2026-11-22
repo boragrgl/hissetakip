@@ -17,7 +17,8 @@ Takip edilen BIST hisselerinin belirlenen temel analiz kriterlerinden geçip ge�
 ## Altın
 - **Canlı fiyatlar:** Ana sayfadaki ve Altın sayfasındaki çeyrek, gram ve 22 ayar hurda fiyatları Altınkaynak'tan canlı gelir (`/api/altin`, `src/worker.js`).
 - **Grafik:** Altın sayfasındaki grafik `site/data/altin-gecmis.json` dosyasından çizilir. GitHub Actions bu dosyaya saat başı Altınkaynak kaydı ekler.
-- **Geriye dönük kısım (EVDS):** TCMB EVDS'den bir kez aktarılır. Adımlar:
+- **Geriye dönük kısım:** 1 Eylül – 21 Kasım 2026 arasındaki günlük kapanışlar `veri/` klasöründeki Excel dosyasından gelir. Dosya `python3 robot/dosya_aktar.py veri/<dosya>.xlsx` komutuyla eklenir. Grafikte kesikli çizgiyle gösterilir.
+- **Yedek yol (EVDS, şu an kullanılmıyor):** TCMB EVDS'den aktarım. Adımlar:
   1. https://evds2.tcmb.gov.tr adresinde ücretsiz üye ol, *Profil → API Anahtarı* bölümünden anahtarını kopyala.
   2. GitHub'da *Settings → Secrets and variables → Actions → New repository secret* ekranına git. Adı `EVDS_API_KEY`, değeri anahtarın olsun.
   3. *Actions → "EVDS geçmiş altın aktarımı" → Run workflow* adımlarıyla çalıştır.

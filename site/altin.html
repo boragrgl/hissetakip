@@ -53,7 +53,7 @@
   <p class="note">Canlı fiyatlar Altınkaynak'ın herkese açık altın servisinden gelir ve saat başı kaydedilir.</p>
 </main>
 
-<footer><div class="wrap"><div>Altın: Altınkaynak; geçmiş tahmini kısım TCMB EVDS. Yatırım tavsiyesi değildir.</div></div></footer>
+<footer><div class="wrap"><div>Altın: Altınkaynak (canlı ve saatlik kayıt); 22 Kasım öncesi günlük kapanışlar yüklenen dosyadan. Yatırım tavsiyesi değildir.</div></div></footer>
 
 <script src="ortak.js"></script>
 <script>
@@ -76,9 +76,12 @@ function grafik() {
   document.getElementById("g-deger").textContent = tr(son.s) + " ₺";
   document.getElementById("g-chg").innerHTML = s.length > 1 ? `<span class="${fark >= 0 ? "up" : "down"}">${fark >= 0 ? "+" : "−"}${tr(Math.abs(son.s - ilk.s))} ₺ (${fark >= 0 ? "+" : "−"}${tr(Math.abs(fark) * 100, 2)}%)</span> <span style="color:var(--soft)">son ${GUN} gün</span>` : "";
   const tahmin = s.some(p => p.tahmini), gercekIlk = s.find(p => !p.tahmini);
-  key.innerHTML = `<span><i style="border-color:var(--gold)"></i>Satış (Altınkaynak)</span>${tahmin ? `<span><i style="border-color:var(--gold);border-top-style:dashed"></i>Tahmini (TCMB EVDS'den)</span>` : ""}<span><i style="border-color:var(--soft)"></i>Alış</span>`;
+  const KAYNAK = { dosya: "Günlük kapanış (yüklenen dosya)", evds: "Tahmini (TCMB EVDS)" };
+  const gecmisAd = [...new Set(s.filter(p => p.tahmini).map(p => KAYNAK[p.kaynak] || p.kaynak))].join(", ");
+  key.innerHTML = `<span><i style="border-color:var(--gold)"></i>Satış (Altınkaynak)</span>${tahmin ? `<span><i style="border-color:var(--gold);border-top-style:dashed"></i>${gecmisAd}</span>` : ""}<span><i style="border-color:var(--soft)"></i>Alış (Altınkaynak)</span>`;
   const kapsam = (son.t - ilk.t) / 864e5;
-  not.textContent = tahmin && gercekIlk ? `${gercekIlk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} öncesi kesikli kısım, TCMB EVDS altın serisinin Altınkaynak fiyatına ölçeklenmiş tahminidir.` : (kapsam < GUN - 4 ? `Kayıtlar ${ilk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} tarihinden başlıyor; 1 aylık görünüm kayıtlar biriktikçe dolacak.` : "");
+  const dosyaVar = s.some(p => p.kaynak === "dosya");
+  not.textContent = tahmin && gercekIlk ? `${gercekIlk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} öncesi kesikli kısım ${dosyaVar ? `yüklenen dosyadaki günlük ${sec === "B_T" ? "gösterge fiyatlarıdır (bozdurma fiyatı değildir)" : "kapanış fiyatlarıdır"}` : "TCMB EVDS altın serisinin Altınkaynak fiyatına ölçeklenmiş tahminidir"}; Altınkaynak fiyatı değildir.` : (kapsam < GUN - 4 ? `Kayıtlar ${ilk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} tarihinden başlıyor; 1 aylık görünüm kayıtlar biriktikçe dolacak.` : "");
 
   const L = W < 420 ? 48 : 62, R = 14, T = 12, B = 28;
   const vals = s.flatMap(p => [p.a, p.s]).filter(v => v != null);
@@ -109,7 +112,9 @@ function imlec(e) {
   let best = pts[0]; for (const q of pts) if (Math.abs(q.x - cx) < Math.abs(best.x - cx)) best = q;
   const c = svg.querySelector("#cursor"); c.setAttribute("x1", best.x); c.setAttribute("x2", best.x); c.setAttribute("visibility", "visible");
   tip.style.display = "block"; tip.style.left = Math.min(Math.max(best.x, 70), b.width - 70) + "px"; tip.style.top = best.y + "px";
-  tip.innerHTML = `<b>${tr(best.p.s)} ₺</b> · alış ${tr(best.p.a)} ₺<br><span style="color:var(--soft)">${best.p.t.toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" })}${best.p.tahmini ? " · tahmini" : ""}</span>`;
+  const kd = { dosya: "günlük kapanış", evds: "tahmini", altinkaynak: "Altınkaynak" }[best.p.kaynak] || best.p.kaynak;
+  const zt = best.p.kaynak === "dosya" ? best.p.t.toLocaleDateString("tr-TR", { day: "numeric", month: "short" }) : best.p.t.toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
+  tip.innerHTML = `<b>${tr(best.p.s)} ₺</b>${best.p.a != null ? ` · alış ${tr(best.p.a)} ₺` : ""}<br><span style="color:var(--soft)">${zt} · ${kd}</span>`;
 }
 function gizle() { tip.style.display = "none"; const c = svg.querySelector("#cursor"); if (c) c.setAttribute("visibility", "hidden"); }
 svg.addEventListener("pointermove", imlec); svg.addEventListener("pointerleave", gizle);

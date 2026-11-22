@@ -25,7 +25,8 @@ Yanıtlar Türkçe. Kullanıcı: boragrgl. Commit author: `boragrgl <ibit_@hotma
 - `site/hisseler.html` hisse senetleri ekranıdır (tüm ayrıntılar).
 - `src/worker.js` (Cloudflare Worker): `/api/altin` Altınkaynak'ın herkese açık servisinden (https://static.altinkaynak.com/public/Gold, bkz. altinkaynak.com/Araclar/Servisler) gram altın (GA), çeyrek (C) ve 22 ayar hurda (B_T) fiyatlarını 60 sn önbellekle döndürür.
 - Altın grafiği `site/data/altin-gecmis.json` dosyasından çizilir. `.github/workflows/altin.yml` 08:07–23:07 TR arası saatlik kayıt ekler (`robot/altin_kaydet.py`). Altınkaynak'ın arşiv uç noktası (eb.altinkaynak.com) kendi uygulama anahtarıyla çalışır, kullanılmaz. Geçmiş bu yüzden kendi kayıtlarımızla birikir.
-- Geriye dönük kısım TCMB EVDS'den: `robot/evds_aktar.py`, elle çalıştırılan `.github/workflows/evds.yml` (secret `EVDS_API_KEY`). EVDS serisi ilk gerçek Altınkaynak kaydına ölçeklenir ve `kaynak: "evds"` olarak işaretlenir. Grafikte kesikli çizilir ve "tahmini" diye gösterilir. Altınkaynak kayıtları ondan sonra saatlik devam eder.
+- Geriye dönük kısım kullanıcının verdiği Excel dosyasından: `veri/Altin_Gunluk_Fiyatlar_01Eylul_21Kasim2026.xlsx` (1 Eylül – 21 Kasım 2026, günlük kapanış; 22 ayar hurda gösterge değeri). `robot/dosya_aktar.py` ile `kaynak: "dosya"` olarak eklenir. Alış yok, grafikte kesikli çizilir. Yeni bir dosya gelirse aynı betikle eklenir.
+- Yedek yol (şu an kullanılmıyor) TCMB EVDS: `robot/evds_aktar.py`, elle çalıştırılan `.github/workflows/evds.yml` (secret `EVDS_API_KEY`). EVDS serisi ilk gerçek Altınkaynak kaydına ölçeklenir ve `kaynak: "evds"` olarak işaretlenir. Grafikte kesikli çizilir ve "tahmini" diye gösterilir. Altınkaynak kayıtları ondan sonra saatlik devam eder.
 
 ## Teknik analiz (sonraki aşama)
 `sonuc.json` içindeki her hisseye şu alan eklenecek:

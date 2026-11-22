@@ -8,11 +8,11 @@ window.HT = (() => {
   const TURLER = [["C", "Çeyrek altın"], ["GA", "Gram altın"], ["B_T", "22 ayar hurda"]];
   const altin = { hist: [], canli: null };
 
-  // Bir türün zaman serisi: geçmiş kayıtlar + (daha yeniyse) canlı fiyat. tahmini=true → EVDS'den türetilmiş
+  // Bir türün zaman serisi: geçmiş kayıtlar + (daha yeniyse) canlı fiyat. tahmini=true → Altınkaynak dışı geçmiş (dosya / EVDS)
   function seri(kod, gun) {
-    const s = altin.hist.map(k => ({ t: new Date(k.t), a: k[kod]?.[0], s: k[kod]?.[1], tahmini: k.kaynak === "evds" })).filter(p => p.s != null);
+    const s = altin.hist.map(k => ({ t: new Date(k.t), a: k[kod]?.[0], s: k[kod]?.[1], tahmini: !!k.kaynak, kaynak: k.kaynak || "altinkaynak" })).filter(p => p.s != null);
     const c = altin.canli?.kalemler?.find(x => x.kod === kod), t = parseTR(c?.guncelleme);
-    if (c && c.satis != null && t && (!s.length || t > s[s.length - 1].t)) s.push({ t, a: c.alis, s: c.satis, tahmini: false });
+    if (c && c.satis != null && t && (!s.length || t > s[s.length - 1].t)) s.push({ t, a: c.alis, s: c.satis, tahmini: false, kaynak: "altinkaynak" });
     if (!gun) return s;
     const sinir = Date.now() - gun * 864e5;
     return s.filter(p => p.t.getTime() >= sinir);
