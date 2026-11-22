@@ -17,14 +17,11 @@
 /* Altın ayrıntı: başlık + büyük fiyat, yanında Alış/Satış/Yüksek/Düşük kutuları, gün içi aralık çubuğu, 1 aylık grafik */
 .ust{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
 .ust .seg{background:var(--fill)}
-.kirinti{font-size:15px;text-decoration:none}
-.hero{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:24px;align-items:end}
-.hero h1{margin:0 0 4px}
-.buyuk{font-size:clamp(40px,5.4vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
-.hero .pct{font-size:18px;font-weight:600;display:inline-block;margin-top:8px}
-.kutular{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.ust h1{font-size:clamp(26px,3vw,32px);margin:0}
+.hero{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kutu .pct{font-size:14px;font-weight:600;margin-left:8px}
 .kutu{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px}
-.kutu span{display:block;font-size:13px;color:var(--soft)}
+.kutu>span{display:block;font-size:13px;color:var(--soft)}
 .kutu b{display:block;font-size:clamp(18px,2vw,22px);font-weight:600;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
 .aralik{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:26px;font-size:14px;font-weight:600}
 .aralik .d{color:var(--red)}.aralik .y{color:var(--green)}
@@ -40,7 +37,7 @@
 .key i{display:inline-block;width:16px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
 .tip{position:absolute;pointer-events:none;background:var(--card);box-shadow:0 4px 16px rgba(0,0,0,.15);border-radius:10px;padding:6px 10px;font-size:13px;white-space:nowrap;transform:translate(-50%,-110%);display:none}
 .tip b{font-weight:600}
-@media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}.kutular{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:860px){.hero{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:640px){.fig{height:260px}.kutu{padding:12px 14px;border-radius:14px}.ust .seg{width:100%}.ust .seg button{flex:1;padding:7px 4px;font-size:13px}}
 </style>
 </head>
@@ -52,18 +49,15 @@
 
 <main class="wrap page">
   <div class="ust">
-    <a class="kirinti" href="./">‹ Ana sayfa</a>
+    <h1 id="baslik">Altın</h1>
     <div class="seg" role="group" aria-label="Altın türü" id="turler"></div>
   </div>
 
   <div class="hero">
-    <div><h1 id="baslik">Altın</h1><div class="buyuk" id="buyuk">—</div><span class="pct" id="yuzde"></span></div>
-    <div class="kutular">
-      <div class="kutu"><span>Alış</span><b id="k-alis">—</b></div>
-      <div class="kutu"><span>Satış</span><b id="k-satis">—</b></div>
-      <div class="kutu"><span>Yüksek</span><b id="k-yuksek">—</b></div>
-      <div class="kutu"><span>Düşük</span><b id="k-dusuk">—</b></div>
-    </div>
+    <div class="kutu"><span>Alış</span><b id="k-alis">—</b></div>
+    <div class="kutu"><span>Satış</span><b><span id="k-satis">—</span><span class="pct" id="yuzde"></span></b></div>
+    <div class="kutu"><span>Yüksek</span><b id="k-yuksek">—</b></div>
+    <div class="kutu"><span>Düşük</span><b id="k-dusuk">—</b></div>
   </div>
   <div class="aralik"><span class="d">Düşük</span><div class="cubuk"><i id="imlec" style="left:50%"></i></div><span class="y">Yüksek</span></div>
   <p class="note" id="guncel"></p>
@@ -83,7 +77,7 @@
 {
 const { tr, TURLER, tur, para, altinYukle, seri, son, degisim, gunAraligi } = HT;
 const GUN = 30;
-let sec = TURLER.some(t => t[0] === location.hash.slice(1)) ? location.hash.slice(1) : "GA", pts = [];
+let sec = TURLER.some(t => t[0] === location.hash.slice(1)) ? location.hash.slice(1) : "C", pts = [];
 const svg = document.getElementById("chart"), tip = document.getElementById("tip"), $ = id => document.getElementById(id);
 
 function ust() {
@@ -91,7 +85,6 @@ function ust() {
   const [, ad] = tur(sec), p = son(sec), d = degisim(sec), ar = gunAraligi(sec);
   document.title = `${ad} · Hisse Takip`;
   $("baslik").textContent = ad.charAt(0).toUpperCase() + ad.slice(1);
-  $("buyuk").textContent = p ? para(sec, p.s) : "—";
   $("yuzde").innerHTML = d == null ? "" : `<span class="${d >= 0 ? "up" : "down"}">${d < 0 ? "-" : ""}%${tr(Math.abs(d) * 100, 2)}</span>`;
   $("k-alis").textContent = p ? para(sec, p.a) : "—";
   $("k-satis").textContent = p ? para(sec, p.s) : "—";
