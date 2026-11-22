@@ -13,6 +13,8 @@ if os.path.abspath(src) != os.path.abspath(dst):
     shutil.copyfile(src, dst)
 html = open(os.path.join(site, "hisseler.html"), encoding="utf-8").read()
 data = json.dumps(json.load(open(src, encoding="utf-8")), ensure_ascii=False).replace("</", "<\\/")
+css = open(os.path.join(site, "stil.css"), encoding="utf-8").read()
+html = html.replace('<link rel="stylesheet" href="stil.css">', "<style>\n" + css + "\n</style>", 1)
 html = html.replace("<script>\n{", "<script>window.__TA_DATA__=" + data + ";</script>\n<script>\n{", 1)
 open(os.path.join(site, "hisse-takip.html"), "w", encoding="utf-8").write(html)
 print("ok", os.path.join(site, "hisse-takip.html"))

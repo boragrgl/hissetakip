@@ -19,9 +19,13 @@ Yanıtlar Türkçe. Kullanıcı: boragrgl. Commit author: `boragrgl <ibit_@hotma
 6. Kullanıcıya kısa özet gönder. Hata olursa veri uydurma ve push yapma.
 
 ## Site
-- `site/index.html` ana sayfadır: solda altın, sağda hisse özeti. `site/hisseler.html` hisse senetleri ekranıdır.
+- Tasarım Apple tarzı: ortak stiller `site/stil.css`, ortak altın kodu `site/ortak.js`. Üst menü: Ana sayfa · Altın · Hisse Senetleri.
+- `site/index.html` sade ana sayfadır: üstte altın KPI'ları (sıra: çeyrek, gram, 22 ayar hurda), altta yalnız hisse özeti (kaç hisse geçiyor; alım adayı/koşullu/izleme sayıları). Grafik ana sayfada yok.
+- `site/altin.html` altın sayfası: KPI seçimi + seçili türün 1 aylık grafiği. KPI'ya tıklamak `altin.html#KOD` açar.
+- `site/hisseler.html` hisse senetleri ekranıdır (tüm ayrıntılar).
 - `src/worker.js` (Cloudflare Worker): `/api/altin` Altınkaynak'ın herkese açık servisinden (https://static.altinkaynak.com/public/Gold, bkz. altinkaynak.com/Araclar/Servisler) gram altın (GA), çeyrek (C) ve 22 ayar hurda (B_T) fiyatlarını 60 sn önbellekle döndürür.
 - Altın grafiği `site/data/altin-gecmis.json` dosyasından çizilir. `.github/workflows/altin.yml` 08:07–23:07 TR arası saatlik kayıt ekler (`robot/altin_kaydet.py`). Altınkaynak'ın arşiv uç noktası (eb.altinkaynak.com) kendi uygulama anahtarıyla çalışır, kullanılmaz. Geçmiş bu yüzden kendi kayıtlarımızla birikir.
+- Geriye dönük kısım TCMB EVDS'den: `robot/evds_aktar.py`, elle çalıştırılan `.github/workflows/evds.yml` (secret `EVDS_API_KEY`). EVDS serisi ilk gerçek Altınkaynak kaydına ölçeklenir ve `kaynak: "evds"` olarak işaretlenir. Grafikte kesikli çizilir ve "tahmini" diye gösterilir. Altınkaynak kayıtları ondan sonra saatlik devam eder.
 
 ## Teknik analiz (sonraki aşama)
 `sonuc.json` içindeki her hisseye şu alan eklenecek:

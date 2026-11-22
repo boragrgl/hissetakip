@@ -2,177 +2,70 @@
 <html lang="tr">
 <head>
 <meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Hisse Takip</title>
-<meta name="theme-color" content="#1a1817">
+<meta name="theme-color" content="#f5f5f7" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#000000" media="(prefers-color-scheme: dark)">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Hisse Takip">
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Libre+Franklin:wght@400;500;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="stil.css">
 <style>
-/* VOICE work: the front page of a markets paper
-   IDEA left column the gold desk's price board, right column the stock screener digest
-   PICTURE the gold price line for the selected type, one month, sell above buy
-   COLOUR pink ground, ink, gold line, teal/claret for pass/fail; night #1c1512
-   TYPE Libre Franklin 800 + Libre Franklin
-   LAYOUT laptop: two equal columns, gold left; phone: gold, chart, then stocks */
-:root{color-scheme:light dark;--bg:light-dark(#ffe3dc,#1c1512);--ink:light-dark(#1a1817,#f3e9e4);--soft:light-dark(#6b5d58,#b9a9a2);--rule:light-dark(#e8c4b9,#3d302b);--panel:light-dark(#fff1ec,#261d19);--teal:light-dark(#0d7680,#3fb3bc);--claret:light-dark(#990f3d,#e0567f);--mid:light-dark(#b98a2e,#d9ab4f);--gold:light-dark(#9a6800,#e8b84a)}
-:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
-*{box-sizing:border-box;min-width:0}
-body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Libre Franklin",system-ui,sans-serif;overflow-x:clip}
-.tabs{display:flex;gap:4px;flex-wrap:wrap;padding:10px max(4vw,16px) 0;max-width:calc(1240px + 8vw);margin:0 auto}
-.tabs a{font-size:15px;font-weight:600;color:var(--ink);text-decoration:none;padding:10px 14px;border-radius:6px 6px 0 0;min-height:44px;display:inline-flex;align-items:center}
-.tabs a[aria-current=page]{background:var(--ink);color:var(--bg)}
-.tabs a:not([aria-current]):hover{background:var(--panel)}
-.tabs a:focus-visible,button:focus-visible,.row:focus-visible{outline:2px solid var(--teal);outline-offset:2px}
-.top{border-top:2px solid var(--ink)}
-.band{padding:clamp(18px,3vw,36px) max(4vw,16px)}
-.wrap{max-width:1240px;margin:0 auto}
-.home{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:clamp(24px,4vw,48px);align-items:start}
-h1{font-weight:800;font-size:clamp(28px,3.4vw,40px);line-height:1.05;letter-spacing:-.02em;margin:0 0 6px;text-wrap:balance}
-h2{font-weight:800;font-size:clamp(24px,2.6vw,30px);line-height:1.05;letter-spacing:-.02em;margin:0}
-.sub{font-size:14px;color:var(--soft);margin:0 0 16px}
-.colhead{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap;border-bottom:1px solid var(--ink);padding-bottom:8px;margin-bottom:14px}
-.colhead a{font-size:14px;font-weight:600;color:var(--ink)}
-.prices{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}
-.price{font:inherit;text-align:left;color:var(--ink);background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px;cursor:pointer;min-height:44px}
-.price[aria-pressed=true]{border-color:var(--gold);box-shadow:inset 0 -4px 0 var(--gold)}
-.price .ad{display:block;font-size:13px;font-weight:600;color:var(--soft)}
-.price b{display:block;font-size:clamp(20px,2.2vw,26px);font-weight:800;line-height:1.15;font-variant-numeric:tabular-nums;white-space:nowrap}
-.price .al{display:block;font-size:13px;color:var(--soft);white-space:nowrap}
-.price .ch{font-size:13px;font-weight:600;white-space:nowrap}
-.up{color:var(--teal)}.down{color:var(--claret)}
-.chartbox{margin-top:16px;background:var(--panel);border:1px solid var(--rule);border-radius:6px;padding:12px 12px 8px}
-.chartbox .mh{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:14px}
-.chartbox .mh b{font-weight:800}
-.fig{position:relative;height:280px;margin-top:6px}
-.fig svg{position:absolute;inset:0;width:100%;height:100%}
-.fig svg text{font:12px "Libre Franklin",system-ui,sans-serif;fill:var(--soft)}
-.note{font-size:13px;color:var(--soft);margin:6px 0 0}
-.key{display:flex;gap:14px;font-size:13px;color:var(--soft);margin-top:4px}
-.key i{display:inline-block;width:14px;height:3px;vertical-align:middle;margin-right:5px;border-radius:2px}
-.figs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-bottom:14px}
-.figs div{border-top:1px solid var(--rule);padding-top:4px}
-.figs b{display:block;font-size:26px;font-weight:800;line-height:1.1}
-.figs span{font-size:13px;color:var(--soft)}
-.row{display:grid;grid-template-columns:minmax(0,1fr) auto auto auto;gap:6px 12px;align-items:center;padding:10px 4px;border-bottom:1px solid var(--rule);color:var(--ink);text-decoration:none}
-.row:hover{background:var(--panel)}
-.kod{font-weight:800}
-.sek{display:block;font-size:13px;color:var(--soft);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sqs{display:flex;gap:4px}
-.sq{display:inline-block;width:14px;height:14px;border-radius:3px}
-.ok{background:var(--teal)}.no{background:var(--claret)}.mid{background:var(--mid)}.na{border:1.5px dashed var(--soft)}
-.badge{display:inline-block;font-size:13px;font-weight:600;padding:2px 8px;border-radius:4px;white-space:nowrap}
-.b-al{background:var(--teal);color:#fff}.b-ko{border:1px solid var(--ink)}.b-iz{border:1px solid var(--claret);color:var(--claret)}.b-uz{background:var(--claret);color:#fff}.b-yok{color:var(--soft);border:1px dashed var(--soft)}
-.pot{font-variant-numeric:tabular-nums;text-align:right;white-space:nowrap;min-width:3.6em}
-.empty{color:var(--soft);padding:16px 0}
-footer{font-size:13px;color:var(--soft);border-top:1px solid var(--rule)}
-@media(max-width:900px){.home{grid-template-columns:minmax(0,1fr)}}
-@media(max-width:600px){.prices{gap:6px}.price{padding:10px 8px}.price b{font-size:18px}.fig{height:220px}.row{grid-template-columns:minmax(0,1fr) auto auto;}.sqs{display:none}}
+/* Ana sayfa: üstte altın KPI'ları, altta hisse senetleri özeti. Sade. */
+.ozet{display:flex;justify-content:space-between;align-items:center;gap:16px}
+.ozet h3{font-size:20px;font-weight:600;letter-spacing:-.02em;margin:0 0 4px;line-height:1.25}
+.ozet p{margin:0;font-size:14px;color:var(--soft)}
+.stats{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--line)}
+.stats b{display:block;font-size:28px;font-weight:600;letter-spacing:-.02em;line-height:1.1}
+.stats span{font-size:14px;color:var(--soft);display:flex;align-items:center;gap:6px}
+.stats i{display:inline-block;width:8px;height:8px;border-radius:50%}
+.chev-lg{font-size:28px;color:var(--soft);line-height:1}
 </style>
 </head>
 <body>
-<nav class="tabs" aria-label="Bölümler"><a href="./" aria-current="page">Ana sayfa</a><a href="hisseler.html">Hisse senetleri</a></nav>
+<header class="nav"><div class="nav-in">
+  <a class="brand" href="./">Hisse Takip</a>
+  <nav class="seg" aria-label="Bölümler"><a href="./" aria-current="page">Ana sayfa</a><a href="altin.html">Altın</a><a href="hisseler.html">Hisse Senetleri</a></nav>
+</div></header>
 
-<main class="band top"><div class="wrap home">
-  <section aria-labelledby="altin-h">
-    <div class="colhead"><h2 id="altin-h">Altın</h2><span class="sub" id="altin-zaman" style="margin:0">Fiyatlar yükleniyor…</span></div>
-    <div class="prices" id="prices"></div>
-    <div class="chartbox">
-      <div class="mh"><span id="g-title">Son 1 ay</span><b id="g-chg"></b></div>
-      <div class="fig"><svg id="chart" role="img" aria-label="Seçili altın türünün son 1 aylık fiyat grafiği"></svg></div>
-      <div class="key"><span><i style="background:var(--gold)"></i>Satış</span><span><i style="background:var(--soft)"></i>Alış</span></div>
-      <p class="note" id="g-note"></p>
-    </div>
-    <p class="note">Kaynak: Altınkaynak herkese açık altın servisi. Grafik, saatlik kaydedilen fiyatlardan çizilir.</p>
-  </section>
+<main class="wrap page">
+  <p class="eyebrow" id="tarih"></p>
+  <h1>Piyasa özeti</h1>
 
-  <section aria-labelledby="hisse-h">
-    <div class="colhead"><h2 id="hisse-h">Hisse senetleri</h2><a href="hisseler.html">Tüm ekran →</a></div>
-    <h1 id="h-title" style="font-size:clamp(22px,2.4vw,28px)">Temel analiz yükleniyor…</h1>
-    <p class="sub" id="h-sub"></p>
-    <div class="figs" id="h-figs"></div>
-    <div id="h-rows"></div>
-  </section>
-</div></main>
+  <div class="sec-h"><h2>Altın</h2><a href="altin.html">Grafikler ›</a></div>
+  <div class="kpis" id="kpis"></div>
+  <p class="note" id="zaman"></p>
 
-<footer class="band"><div class="wrap">Altın: Altınkaynak. Hisseler: İş Yatırım mali tablolar ve oranlar. Belirlenen kuralların mekanik uygulamasıdır; yatırım tavsiyesi değildir.</div></footer>
+  <div class="sec-h"><h2><a href="hisseler.html">Hisse Senetleri ›</a></h2></div>
+  <a class="card card-link" href="hisseler.html" aria-label="Hisse senetleri sayfasını aç">
+    <div class="ozet"><div><h3 id="h-baslik">Temel analiz yükleniyor…</h3><p id="h-zaman"></p></div><span class="chev-lg" aria-hidden="true">›</span></div>
+    <div class="stats" id="h-stats"></div>
+  </a>
+</main>
 
+<footer><div class="wrap"><div>Altın: Altınkaynak. Hisseler: İş Yatırım mali tablolar ve oranlar. Kuralların mekanik uygulamasıdır; yatırım tavsiyesi değildir.</div></div></footer>
+
+<script src="ortak.js"></script>
 <script>
 {
-const TURLER = [["GA","Gram altın"],["C","Çeyrek altın"],["B_T","22 ayar hurda"]];
-const GUN = 30;
-const tr = (x,d=0)=>x==null||isNaN(x)?"—":x.toLocaleString("tr-TR",{minimumFractionDigits:d,maximumFractionDigits:d});
-const pc = (x,d=0)=>x==null?"—":(x<0?"-%":"%")+tr(Math.abs(x)*100,d);
-const esc = s=>String(s??"").replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
-const parseTR = s=>{const m=/(\d+)\.(\d+)\.(\d+) (\d+):(\d+)/.exec(s||"");return m?new Date(`${m[3]}-${m[2]}-${m[1]}T${m[4].padStart(2,"0")}:${m[5]}:00+03:00`):null};
-let hist=[], canli=null, sec="GA";
-
-function seri(kod){
-  const s=hist.map(k=>({t:new Date(k.t),a:k[kod]?.[0],s:k[kod]?.[1]})).filter(p=>p.s!=null);
-  if(canli){const c=canli.kalemler.find(x=>x.kod===kod), t=parseTR(c?.guncelleme);
-    if(c&&c.satis!=null&&t&&(!s.length||t>s[s.length-1].t))s.push({t,a:c.alis,s:c.satis});}
-  const sinir=Date.now()-GUN*864e5;
-  return s.filter(p=>p.t.getTime()>=sinir);
-}
-function gunlukDegisim(kod){
-  const s=seri(kod); if(s.length<2)return null;
-  const son=s[s.length-1], gun=son.t.getTime()-864e5;
-  let ref=null; for(const p of s) if(p.t.getTime()<=gun) ref=p;
-  return ref?son.s/ref.s-1:null;
-}
-function fiyatlar(){
-  document.getElementById("prices").innerHTML=TURLER.map(([kod,ad])=>{
-    const c=canli?.kalemler.find(x=>x.kod===kod); const s=seri(kod); const son=s[s.length-1]||{};
-    const al=c?.alis??son.a, sa=c?.satis??son.s, d=gunlukDegisim(kod);
-    return `<button class="price" data-k="${kod}" aria-pressed="${kod===sec}"><span class="ad">${ad}</span><b>${tr(sa)} ₺</b><span class="al">Alış ${tr(al)} ₺</span>${d==null?"":`<span class="ch ${d>=0?"up":"down"}">${d>=0?"▲":"▼"} ${pc(d,2)} 24 sa</span>`}</button>`;
-  }).join("");
-  const c=canli?.kalemler.find(x=>x.kod==="GA"), t=parseTR(c?.guncelleme);
-  document.getElementById("altin-zaman").textContent=t?`Altınkaynak · ${t.toLocaleString("tr-TR",{day:"numeric",month:"short",hour:"2-digit",minute:"2-digit"})}`:(canli===false?"Canlı fiyat alınamadı, son kayıt gösteriliyor":"");
-}
-function cizim(){
-  const svg=document.getElementById("chart"), W=svg.clientWidth, H=svg.clientHeight; if(!W||!H)return;
-  const ad=TURLER.find(t=>t[0]===sec)[1], s=seri(sec);
-  document.getElementById("g-title").textContent=`${ad} · son ${GUN} gün`;
-  const note=document.getElementById("g-note"), chg=document.getElementById("g-chg");
-  if(!s.length){svg.innerHTML="";note.textContent="Henüz kayıt yok.";chg.textContent="";return}
-  const ilk=s[0], son=s[s.length-1], gunler=Math.round((son.t-ilk.t)/864e5);
-  note.textContent=gunler<GUN?`Grafik için fiyatlar ${ilk.t.toLocaleDateString("tr-TR",{day:"numeric",month:"long"})} tarihinden beri kaydediliyor; 1 aylık görünüm ${new Date(ilk.t.getTime()+GUN*864e5).toLocaleDateString("tr-TR",{day:"numeric",month:"long"})} tarihinde dolacak.`:"";
-  const dd=son.s/ilk.s-1; chg.innerHTML=s.length>1?`<span class="${dd>=0?"up":"down"}">${dd>=0?"▲":"▼"} ${pc(dd,1)}</span>`:"";
-  const L=W<420?44:58,R=12,T=14,B=26, vals=s.flatMap(p=>[p.a,p.s]).filter(v=>v!=null);
-  let lo=Math.min(...vals),hi=Math.max(...vals); const pad=(hi-lo)*0.08||hi*0.01; lo-=pad; hi+=pad;
-  const t0=Math.min(ilk.t.getTime(),Date.now()-GUN*864e5), t1=Math.max(son.t.getTime(),Date.now());
-  const x=t=>L+(t-t0)/(t1-t0)*(W-L-R), y=v=>T+(hi-v)/(hi-lo)*(H-T-B);
-  const step=(()=>{const r=(hi-lo)/4,p=10**Math.floor(Math.log10(r)),m=r/p;return (m<1.5?1:m<3.5?2:m<7.5?5:10)*p})();
-  let g=""; for(let v=Math.ceil(lo/step)*step; v<=hi; v+=step){const yy=y(v);g+=`<line x1="${L}" x2="${W-R}" y1="${yy}" y2="${yy}" stroke="var(--rule)"/><text x="${L-6}" y="${yy+4}" text-anchor="end">${tr(v)}</text>`}
-  const nt=W<420?3:5; for(let i=0;i<=nt;i++){const t=t0+(t1-t0)*i/nt, xx=x(t);g+=`<text x="${xx}" y="${H-6}" text-anchor="${i===0?"start":i===nt?"end":"middle"}">${new Date(t).toLocaleDateString("tr-TR",{day:"numeric",month:"short"})}</text>`}
-  const yol=k=>s.filter(p=>p[k]!=null).map((p,i)=>`${i?"L":"M"}${x(p.t.getTime()).toFixed(1)},${y(p[k]).toFixed(1)}`).join("");
-  const nokta=(k,c)=>s.length<40?s.filter(p=>p[k]!=null).map(p=>`<circle cx="${x(p.t.getTime())}" cy="${y(p[k])}" r="3" fill="${c}"/>`).join(""):"";
-  const lx=x(son.t.getTime()), ly=y(son.s);
-  g+=`<path d="${yol("a")}" fill="none" stroke="var(--soft)" stroke-width="1.5"/>${nokta("a","var(--soft)")}
-      <path d="${yol("s")}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round"/>${nokta("s","var(--gold)")}
-      <text x="${Math.min(lx,W-R)}" y="${Math.max(ly-10,T+10)}" text-anchor="end" style="fill:var(--ink);font-weight:600;paint-order:stroke;stroke:var(--panel);stroke-width:4px">${tr(son.s)} ₺</text>`;
-  svg.innerHTML=g;
-}
-const sq=v=>`<i class="sq ${({"GEÇTİ":"ok","GÜÇLÜ":"ok","SINIRDA":"mid","DENGELİ":"mid","KALDI":"no","GÜÇSÜZ":"no"}[v]||"na")}"></i>`;
-const KAT={"ALIM ADAYI":["b-al","Alım adayı"],"KOŞULLU":["b-ko","Koşullu"],"İZLEME (BSA FIRSATI)":["b-iz","İzleme"],"UZAK DUR":["b-uz","Uzak dur"],"VERİ YOK":["b-yok","Veri yok"]};
-function hisseler(D){
-  const S=D.sonuclar, n=k=>S.filter(r=>r.karar===k).length, d=new Date(D.meta.asOf);
-  document.getElementById("h-title").textContent=`${S.length} hisseden ${n("ALIM ADAYI")} tanesi dört maddeyi de geçiyor`;
-  document.getElementById("h-sub").textContent=`Son analiz ${d.toLocaleDateString("tr-TR",{day:"numeric",month:"long"})} ${d.toLocaleTimeString("tr-TR",{hour:"2-digit",minute:"2-digit"})}. Kareler: net işletme sermayesi, nakit, mali yapı, kârlılık.`;
-  document.getElementById("h-figs").innerHTML=[[n("ALIM ADAYI"),"alım adayı"],[n("KOŞULLU"),"koşullu"],[n("İZLEME (BSA FIRSATI)"),"izlemede"]].map(f=>`<div><b>${f[0]}</b><span>${f[1]}</span></div>`).join("");
-  document.getElementById("h-rows").innerHTML=S.map(r=>{const k=KAT[r.karar]||["b-yok",r.karar];
-    return `<a class="row" href="hisseler.html#${encodeURIComponent(r.kod)}"><span><span class="kod">${esc(r.kod)}</span><span class="sek">${esc(r.sektor||"")}</span></span><span class="sqs">${sq(r.m1)}${sq(r.m2)}${sq(r.m3)}${sq(r.m4)}</span><span class="badge ${k[0]}">${k[1]}</span><span class="pot">${pc(r.potansiyel)}</span></a>`}).join("");
-}
-document.getElementById("prices").addEventListener("click",e=>{const b=e.target.closest(".price");if(!b)return;sec=b.dataset.k;fiyatlar();cizim()});
-const ro=new ResizeObserver(cizim); ro.observe(document.getElementById("chart"));
-async function canliYukle(){try{const r=await fetch("api/altin",{cache:"no-store"});canli=r.ok?await r.json():false}catch(e){canli=false} if(canli&&!canli.kalemler)canli=false; fiyatlar();cizim()}
-fetch("data/altin-gecmis.json",{cache:"no-store"}).then(r=>r.json()).then(j=>{hist=j.kayitlar||[]}).catch(()=>{}).finally(()=>{fiyatlar();cizim();canliYukle()});
-setInterval(canliYukle,60000);
-fetch("data/sonuc.json",{cache:"no-store"}).then(r=>r.json()).then(hisseler).catch(()=>{document.getElementById("h-title").textContent="Hisse verisi okunamadı."});
+const { tr, TURLER, altinYukle, kpi, zaman } = HT;
+document.getElementById("tarih").textContent = new Date().toLocaleDateString("tr-TR", { weekday: "long", day: "numeric", month: "long" });
+const ciz = () => {
+  document.getElementById("kpis").innerHTML = TURLER.map(([k, ad]) => kpi(k, ad, { link: "altin.html#" + k })).join("");
+  document.getElementById("zaman").textContent = zaman();
+};
+altinYukle(ciz);
+fetch("data/sonuc.json", { cache: "no-store" }).then(r => r.json()).then(D => {
+  const S = D.sonuclar, n = k => S.filter(r => r.karar === k).length, d = new Date(D.meta.asOf);
+  document.getElementById("h-baslik").textContent = `${S.length} hisseden ${n("ALIM ADAYI")} tanesi dört maddeyi de geçiyor`;
+  document.getElementById("h-zaman").textContent = `Son analiz ${d.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} ${d.toLocaleTimeString("tr-TR", { hour: "2-digit", minute: "2-digit" })}`;
+  document.getElementById("h-stats").innerHTML = [["ALIM ADAYI", "Alım adayı", "var(--green)"], ["KOŞULLU", "Koşullu", "var(--soft)"], ["İZLEME (BSA FIRSATI)", "İzleme", "var(--orange)"]]
+    .map(([k, ad, c]) => `<div><b>${n(k)}</b><span><i style="background:${c}"></i>${ad}</span></div>`).join("");
+}).catch(() => { document.getElementById("h-baslik").textContent = "Hisse verisi okunamadı"; });
 }
 </script>
 </body>

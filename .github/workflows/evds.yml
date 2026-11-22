@@ -1,0 +1,36 @@
+name: EVDS geçmiş altın aktarımı
+
+# Elle çalıştırılır (Actions → "EVDS geçmiş altın aktarımı" → Run workflow).
+# Gerekli: depo ayarlarında EVDS_API_KEY adlı Actions secret'ı.
+on:
+  workflow_dispatch:
+    inputs:
+      gun:
+        description: "Kaç gün geriye gidilsin"
+        default: "45"
+
+permissions:
+  contents: write
+
+concurrency:
+  group: altin-kaydi
+  cancel-in-progress: false
+
+jobs:
+  aktar:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: EVDS'den aktar
+        env:
+          EVDS_API_KEY: ${{ secrets.EVDS_API_KEY }}
+        run: python3 robot/evds_aktar.py site/data/altin-gecmis.json --gun "${{ inputs.gun }}"
+      - name: Gönder
+        run: |
+          if git diff --quiet; then echo "değişiklik yok"; exit 0; fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add site/data/altin-gecmis.json
+          git commit -m "altın: EVDS geçmiş aktarımı"
+          for i in 1 2 3; do git pull --rebase -q && git push && exit 0; sleep 5; done
+          exit 1
