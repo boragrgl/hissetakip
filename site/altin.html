@@ -14,10 +14,24 @@
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="stil.css">
 <style>
-/* Altın sayfası: KPI seçimi + seçili türün grafiği */
-.chart-h{display:flex;justify-content:space-between;align-items:flex-start;gap:12px;flex-wrap:wrap}
-.chart-h .ad{font-size:15px;color:var(--soft);margin:0}
-.chart-h .deger{font-size:34px;font-weight:600;letter-spacing:-.025em;line-height:1.15;font-variant-numeric:tabular-nums}
+/* Altın ayrıntı: başlık + büyük fiyat, yanında Alış/Satış/Yüksek/Düşük kutuları, gün içi aralık çubuğu, 1 aylık grafik */
+.ust{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:18px}
+.ust .seg{background:var(--fill)}
+.kirinti{font-size:15px;text-decoration:none}
+.hero{display:grid;grid-template-columns:minmax(0,auto) minmax(0,1fr);gap:24px;align-items:end}
+.hero h1{margin:0 0 4px}
+.buyuk{font-size:clamp(40px,5.4vw,58px);font-weight:700;letter-spacing:-.03em;line-height:1;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero .pct{font-size:18px;font-weight:600;display:inline-block;margin-top:8px}
+.kutular{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px}
+.kutu{background:var(--card);border-radius:16px;box-shadow:var(--shadow);padding:16px 18px}
+.kutu span{display:block;font-size:13px;color:var(--soft)}
+.kutu b{display:block;font-size:clamp(18px,2vw,22px);font-weight:600;letter-spacing:-.02em;margin-top:6px;font-variant-numeric:tabular-nums;white-space:nowrap}
+.aralik{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:12px;align-items:center;margin-top:26px;font-size:14px;font-weight:600}
+.aralik .d{color:var(--red)}.aralik .y{color:var(--green)}
+.cubuk{position:relative;height:6px;border-radius:3px;background:linear-gradient(90deg,var(--red),var(--line) 50%,var(--green))}
+.cubuk i{position:absolute;top:50%;width:16px;height:16px;border-radius:50%;background:var(--card);border:4px solid var(--ink);transform:translate(-50%,-50%);box-shadow:0 1px 4px rgba(0,0,0,.2)}
+.chart-h{display:flex;justify-content:space-between;align-items:baseline;gap:12px;flex-wrap:wrap}
+.chart-h h2{font-size:20px}
 .chart-h .chg{font-size:15px;font-weight:500}
 .fig{position:relative;height:340px;margin-top:12px}
 .fig svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
@@ -26,7 +40,8 @@
 .key i{display:inline-block;width:16px;height:0;border-top:2.5px solid;vertical-align:middle;margin-right:6px}
 .tip{position:absolute;pointer-events:none;background:var(--card);box-shadow:0 4px 16px rgba(0,0,0,.15);border-radius:10px;padding:6px 10px;font-size:13px;white-space:nowrap;transform:translate(-50%,-110%);display:none}
 .tip b{font-weight:600}
-@media(max-width:640px){.fig{height:260px}.chart-h .deger{font-size:28px}}
+@media(max-width:860px){.hero{grid-template-columns:minmax(0,1fr)}.kutular{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.fig{height:260px}.kutu{padding:12px 14px;border-radius:14px}.ust .seg{width:100%}.ust .seg button{flex:1;padding:7px 4px;font-size:13px}}
 </style>
 </head>
 <body>
@@ -36,21 +51,29 @@
 </div></header>
 
 <main class="wrap page">
-  <h1>Altın</h1>
-  <p class="lead" id="zaman">Fiyatlar yükleniyor…</p>
+  <div class="ust">
+    <a class="kirinti" href="./">‹ Ana sayfa</a>
+    <div class="seg" role="group" aria-label="Altın türü" id="turler"></div>
+  </div>
 
-  <div class="kpis" id="kpis" style="margin-top:22px"></div>
-
-  <section class="card" style="margin-top:16px" aria-labelledby="g-ad">
-    <div class="chart-h">
-      <div><p class="ad" id="g-ad">Gram altın · satış</p><div class="deger" id="g-deger">—</div><div class="chg" id="g-chg"></div></div>
-      <div class="seg" role="group" aria-label="Dönem"><button aria-pressed="true" data-gun="30">1 Ay</button></div>
+  <div class="hero">
+    <div><h1 id="baslik">Altın</h1><div class="buyuk" id="buyuk">—</div><span class="pct" id="yuzde"></span></div>
+    <div class="kutular">
+      <div class="kutu"><span>Alış</span><b id="k-alis">—</b></div>
+      <div class="kutu"><span>Satış</span><b id="k-satis">—</b></div>
+      <div class="kutu"><span>Yüksek</span><b id="k-yuksek">—</b></div>
+      <div class="kutu"><span>Düşük</span><b id="k-dusuk">—</b></div>
     </div>
-    <div class="fig" id="fig"><svg id="chart" role="img" aria-label="Seçili altın türünün fiyat grafiği"></svg><div class="tip" id="tip"></div></div>
+  </div>
+  <div class="aralik"><span class="d">Düşük</span><div class="cubuk"><i id="imlec" style="left:50%"></i></div><span class="y">Yüksek</span></div>
+  <p class="note" id="guncel"></p>
+
+  <section class="card" style="margin-top:22px" aria-labelledby="g-h">
+    <div class="chart-h"><h2 id="g-h">Son 1 ay</h2><span class="chg" id="g-chg"></span></div>
+    <div class="fig" id="fig"><svg id="chart" role="img" aria-label="Seçili altın türünün son 1 aylık fiyat grafiği"></svg><div class="tip" id="tip"></div></div>
     <div class="key" id="key"></div>
     <p class="note" id="g-not"></p>
   </section>
-  <p class="note">Canlı fiyatlar Altınkaynak'ın herkese açık altın servisinden gelir ve saat başı kaydedilir.</p>
 </main>
 
 <footer><div class="wrap"><div>Altın: Altınkaynak (canlı ve saatlik kayıt); 22 Kasım öncesi günlük kapanışlar yüklenen dosyadan. Yatırım tavsiyesi değildir.</div></div></footer>
@@ -58,70 +81,76 @@
 <script src="ortak.js"></script>
 <script>
 {
-const { tr, pc, TURLER, altinYukle, kpi, zaman, seri } = HT;
-let sec = TURLER.some(t => t[0] === location.hash.slice(1)) ? location.hash.slice(1) : "GA", GUN = 30, pts = [];
-const svg = document.getElementById("chart"), tip = document.getElementById("tip");
+const { tr, TURLER, tur, para, altinYukle, seri, son, degisim, gunAraligi } = HT;
+const GUN = 30;
+let sec = TURLER.some(t => t[0] === location.hash.slice(1)) ? location.hash.slice(1) : "GA", pts = [];
+const svg = document.getElementById("chart"), tip = document.getElementById("tip"), $ = id => document.getElementById(id);
 
-function kpilar() {
-  document.getElementById("kpis").innerHTML = TURLER.map(([k, ad]) => kpi(k, ad, { secili: k === sec })).join("");
-  document.getElementById("zaman").textContent = zaman() || "Fiyat alınamadı";
+function ust() {
+  $("turler").innerHTML = TURLER.map(([k, ad]) => `<button data-k="${k}" aria-pressed="${k === sec}">${ad.replace(" altın", "").replace("22 ayar hurda", "Hurda")}</button>`).join("");
+  const [, ad] = tur(sec), p = son(sec), d = degisim(sec), ar = gunAraligi(sec);
+  document.title = `${ad} · Hisse Takip`;
+  $("baslik").textContent = ad.charAt(0).toUpperCase() + ad.slice(1);
+  $("buyuk").textContent = p ? para(sec, p.s) : "—";
+  $("yuzde").innerHTML = d == null ? "" : `<span class="${d >= 0 ? "up" : "down"}">${d < 0 ? "-" : ""}%${tr(Math.abs(d) * 100, 2)}</span>`;
+  $("k-alis").textContent = p ? para(sec, p.a) : "—";
+  $("k-satis").textContent = p ? para(sec, p.s) : "—";
+  $("k-yuksek").textContent = ar ? para(sec, ar.yuksek) : "—";
+  $("k-dusuk").textContent = ar ? para(sec, ar.dusuk) : "—";
+  const konum = ar && p && ar.yuksek > ar.dusuk ? (p.s - ar.dusuk) / (ar.yuksek - ar.dusuk) * 100 : 50;
+  $("imlec").style.left = Math.max(0, Math.min(100, konum)) + "%";
+  $("guncel").textContent = p && p.t ? `Güncelleme ${p.t.toLocaleString("tr-TR", { day: "2-digit", month: "2-digit", year: "numeric", hour: "2-digit", minute: "2-digit" })} · Gösterge fiyattır, işlem fiyatı değildir.${ar ? ` Yüksek/düşük ${ar.gun.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} günü ${ar.n} kayda göre (satış).` : ""}` : "Fiyat alınamadı.";
 }
 function grafik() {
   const W = svg.clientWidth, H = svg.clientHeight; if (!W || !H) return;
-  const ad = TURLER.find(t => t[0] === sec)[1], s = seri(sec, GUN);
-  document.getElementById("g-ad").textContent = `${ad} · satış`;
-  const not = document.getElementById("g-not"), key = document.getElementById("key");
-  if (!s.length) { svg.innerHTML = ""; document.getElementById("g-deger").textContent = "—"; not.textContent = "Henüz kayıt yok."; key.innerHTML = ""; return; }
-  const ilk = s[0], son = s[s.length - 1], fark = son.s / ilk.s - 1;
-  document.getElementById("g-deger").textContent = tr(son.s) + " ₺";
-  document.getElementById("g-chg").innerHTML = s.length > 1 ? `<span class="${fark >= 0 ? "up" : "down"}">${fark >= 0 ? "+" : "−"}${tr(Math.abs(son.s - ilk.s))} ₺ (${fark >= 0 ? "+" : "−"}${tr(Math.abs(fark) * 100, 2)}%)</span> <span style="color:var(--soft)">son ${GUN} gün</span>` : "";
-  const tahmin = s.some(p => p.tahmini), gercekIlk = s.find(p => !p.tahmini);
+  const s = seri(sec, GUN), not = $("g-not"), key = $("key");
+  if (s.length < 2) { svg.innerHTML = ""; pts = []; $("g-chg").textContent = ""; key.innerHTML = ""; not.textContent = "Bu tür için grafik verisi henüz birikiyor; saat başı kayıt ekleniyor."; return; }
+  const ilk = s[0], sn = s[s.length - 1], fark = sn.s / ilk.s - 1;
+  $("g-chg").innerHTML = `<span class="${fark >= 0 ? "up" : "down"}">${fark >= 0 ? "+" : "−"}${para(sec, Math.abs(sn.s - ilk.s))} (${fark >= 0 ? "+" : "−"}%${tr(Math.abs(fark) * 100, 2)})</span>`;
+  const tahmin = s.some(p => p.tahmini), gercekIlk = s.find(p => !p.tahmini), dosyaVar = s.some(p => p.kaynak === "dosya");
   const KAYNAK = { dosya: "Günlük kapanış (yüklenen dosya)", evds: "Tahmini (TCMB EVDS)" };
   const gecmisAd = [...new Set(s.filter(p => p.tahmini).map(p => KAYNAK[p.kaynak] || p.kaynak))].join(", ");
   key.innerHTML = `<span><i style="border-color:var(--gold)"></i>Satış (Altınkaynak)</span>${tahmin ? `<span><i style="border-color:var(--gold);border-top-style:dashed"></i>${gecmisAd}</span>` : ""}<span><i style="border-color:var(--soft)"></i>Alış (Altınkaynak)</span>`;
-  const kapsam = (son.t - ilk.t) / 864e5;
-  const dosyaVar = s.some(p => p.kaynak === "dosya");
-  not.textContent = tahmin && gercekIlk ? `${gercekIlk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} öncesi kesikli kısım ${dosyaVar ? `yüklenen dosyadaki günlük ${sec === "B_T" ? "gösterge fiyatlarıdır (bozdurma fiyatı değildir)" : "kapanış fiyatlarıdır"}` : "TCMB EVDS altın serisinin Altınkaynak fiyatına ölçeklenmiş tahminidir"}; Altınkaynak fiyatı değildir.` : (kapsam < GUN - 4 ? `Kayıtlar ${ilk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} tarihinden başlıyor; 1 aylık görünüm kayıtlar biriktikçe dolacak.` : "");
+  not.textContent = tahmin && gercekIlk ? `${gercekIlk.t.toLocaleDateString("tr-TR", { day: "numeric", month: "long" })} öncesi kesikli kısım ${dosyaVar ? `yüklenen dosyadaki günlük ${sec === "B_T" ? "gösterge fiyatlarıdır (bozdurma fiyatı değildir)" : "kapanış fiyatlarıdır"}` : "TCMB EVDS altın serisinin Altınkaynak fiyatına ölçeklenmiş tahminidir"}; Altınkaynak fiyatı değildir.` : "";
 
-  const L = W < 420 ? 48 : 62, R = 14, T = 12, B = 28;
+  const L = W < 420 ? 52 : 66, R = 14, T = 12, B = 28, dd = tur(sec)[3];
   const vals = s.flatMap(p => [p.a, p.s]).filter(v => v != null);
   let lo = Math.min(...vals), hi = Math.max(...vals); const pad = (hi - lo) * 0.1 || hi * 0.01; lo -= pad; hi += pad;
-  const t0 = Math.min(ilk.t.getTime(), Date.now() - GUN * 864e5), t1 = Math.max(son.t.getTime(), Date.now());
+  const t0 = Math.min(ilk.t.getTime(), Date.now() - GUN * 864e5), t1 = Math.max(sn.t.getTime(), Date.now());
   const x = t => L + (t - t0) / (t1 - t0) * (W - L - R), y = v => T + (hi - v) / (hi - lo) * (H - T - B);
   const r = (hi - lo) / 4, p10 = 10 ** Math.floor(Math.log10(r)), m = r / p10, step = (m < 1.5 ? 1 : m < 3.5 ? 2 : m < 7.5 ? 5 : 10) * p10;
   let g = `<defs><linearGradient id="alan" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="var(--gold)" stop-opacity=".16"/><stop offset="1" stop-color="var(--gold)" stop-opacity="0"/></linearGradient></defs>`;
-  for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) { const yy = y(v); g += `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${L - 8}" y="${yy + 4}" text-anchor="end">${tr(v)}</text>`; }
+  for (let v = Math.ceil(lo / step) * step; v <= hi; v += step) { const yy = y(v); g += `<line x1="${L}" x2="${W - R}" y1="${yy}" y2="${yy}" stroke="var(--line)"/><text x="${L - 8}" y="${yy + 4}" text-anchor="end">${tr(v, step < 1 ? dd : 0)}</text>`; }
   const nt = W < 420 ? 3 : 5;
   for (let i = 0; i <= nt; i++) { const t = t0 + (t1 - t0) * i / nt; g += `<text x="${x(t)}" y="${H - 6}" text-anchor="${i === 0 ? "start" : i === nt ? "end" : "middle"}">${new Date(t).toLocaleDateString("tr-TR", { day: "numeric", month: "short" })}</text>`; }
   const yol = (arr, k) => arr.filter(p => p[k] != null).map((p, i) => `${i ? "L" : "M"}${x(p.t.getTime()).toFixed(1)},${y(p[k]).toFixed(1)}`).join("");
-  // Tahmini (EVDS) kısım kesikli, gerçek kısım düz; iki parça birleşim noktasında birleşir
   const iT = s.findIndex(p => !p.tahmini), tah = iT < 0 ? s : s.slice(0, iT + 1), ger = iT < 0 ? [] : s.slice(iT);
-  const alan = s.length > 1 ? `${yol(s, "s")}L${x(son.t.getTime()).toFixed(1)},${H - B}L${x(ilk.t.getTime()).toFixed(1)},${H - B}Z` : "";
-  g += `${alan ? `<path d="${alan}" fill="url(#alan)"/>` : ""}
+  const alan = `${yol(s, "s")}L${x(sn.t.getTime()).toFixed(1)},${H - B}L${x(ilk.t.getTime()).toFixed(1)},${H - B}Z`;
+  g += `<path d="${alan}" fill="url(#alan)"/>
     <path d="${yol(s, "a")}" fill="none" stroke="var(--soft)" stroke-width="1.5" opacity=".7"/>
     ${tah.length > 1 && iT !== 0 ? `<path d="${yol(tah, "s")}" fill="none" stroke="var(--gold)" stroke-width="2" stroke-dasharray="5 4"/>` : ""}
     ${ger.length > 1 ? `<path d="${yol(ger, "s")}" fill="none" stroke="var(--gold)" stroke-width="2.5" stroke-linejoin="round" stroke-linecap="round"/>` : ""}
-    ${s.length < 3 ? s.map(p => `<circle cx="${x(p.t.getTime())}" cy="${y(p.s)}" r="4" fill="var(--gold)"/>`).join("") : `<circle cx="${x(son.t.getTime())}" cy="${y(son.s)}" r="4" fill="var(--gold)" stroke="var(--card)" stroke-width="2"/>`}
+    <circle cx="${x(sn.t.getTime())}" cy="${y(sn.s)}" r="4" fill="var(--gold)" stroke="var(--card)" stroke-width="2"/>
     <line id="cursor" x1="0" x2="0" y1="${T}" y2="${H - B}" stroke="var(--soft)" stroke-dasharray="2 3" visibility="hidden"/>`;
   svg.innerHTML = g;
   pts = s.map(p => ({ x: x(p.t.getTime()), y: y(p.s), p }));
 }
 function imlec(e) {
   if (!pts.length) return;
-  const b = svg.getBoundingClientRect(), cx = (e.touches ? e.touches[0].clientX : e.clientX) - b.left;
+  const b = svg.getBoundingClientRect(), cx = e.clientX - b.left;
   let best = pts[0]; for (const q of pts) if (Math.abs(q.x - cx) < Math.abs(best.x - cx)) best = q;
   const c = svg.querySelector("#cursor"); c.setAttribute("x1", best.x); c.setAttribute("x2", best.x); c.setAttribute("visibility", "visible");
   tip.style.display = "block"; tip.style.left = Math.min(Math.max(best.x, 70), b.width - 70) + "px"; tip.style.top = best.y + "px";
   const kd = { dosya: "günlük kapanış", evds: "tahmini", altinkaynak: "Altınkaynak" }[best.p.kaynak] || best.p.kaynak;
   const zt = best.p.kaynak === "dosya" ? best.p.t.toLocaleDateString("tr-TR", { day: "numeric", month: "short" }) : best.p.t.toLocaleString("tr-TR", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit" });
-  tip.innerHTML = `<b>${tr(best.p.s)} ₺</b>${best.p.a != null ? ` · alış ${tr(best.p.a)} ₺` : ""}<br><span style="color:var(--soft)">${zt} · ${kd}</span>`;
+  tip.innerHTML = `<b>${para(sec, best.p.s)}</b>${best.p.a != null ? ` · alış ${para(sec, best.p.a)}` : ""}<br><span style="color:var(--soft)">${zt} · ${kd}</span>`;
 }
 function gizle() { tip.style.display = "none"; const c = svg.querySelector("#cursor"); if (c) c.setAttribute("visibility", "hidden"); }
 svg.addEventListener("pointermove", imlec); svg.addEventListener("pointerleave", gizle);
-document.getElementById("kpis").addEventListener("click", e => { const b = e.target.closest(".kpi"); if (!b) return; sec = b.dataset.k; history.replaceState(null, "", "#" + sec); kpilar(); grafik(); });
-addEventListener("hashchange", () => { const h = location.hash.slice(1); if (TURLER.some(t => t[0] === h)) { sec = h; kpilar(); grafik(); } });
+$("turler").addEventListener("click", e => { const b = e.target.closest("button"); if (!b) return; sec = b.dataset.k; history.replaceState(null, "", "#" + sec); ust(); grafik(); });
+addEventListener("hashchange", () => { const h = location.hash.slice(1); if (TURLER.some(t => t[0] === h)) { sec = h; ust(); grafik(); } });
 const ro = new ResizeObserver(grafik); ro.observe(svg);
-altinYukle(() => { kpilar(); grafik(); });
+altinYukle(() => { ust(); grafik(); });
 }
 </script>
 </body>

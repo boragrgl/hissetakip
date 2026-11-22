@@ -1,6 +1,6 @@
 // Hisse Takip — Cloudflare Worker
 // /api/altin : Altınkaynak'ın herkese açık altın servisinden (https://www.altinkaynak.com/Araclar/Servisler)
-//              gram altın, çeyrek ve 22 ayar hurda fiyatlarını döndürür. 60 sn önbellekli.
+//              gram altın, çeyrek, 22 ayar hurda (TL) ve ons (USD) fiyatlarını döndürür. 60 sn önbellekli.
 // Diğer tüm adresler: site/ klasöründeki statik dosyalar.
 
 const KAYNAK = "https://static.altinkaynak.com/public/Gold";
@@ -8,6 +8,7 @@ const SECILI = [
   { kod: "GA", ad: "Gram altın" },
   { kod: "C", ad: "Çeyrek altın" },
   { kod: "B_T", ad: "22 ayar hurda" },
+  { kod: "XAUUSD", ad: "Ons altın" },
 ];
 
 // "6.013" → 6013, "63,06" → 63.06

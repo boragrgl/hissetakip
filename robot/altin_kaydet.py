@@ -10,7 +10,7 @@ from datetime import datetime
 from zoneinfo import ZoneInfo
 
 KAYNAK = "https://static.altinkaynak.com/public/Gold"
-KODLAR = ["GA", "C", "B_T"]           # gram altın, çeyrek, 22 ayar hurda
+KODLAR = ["GA", "C", "B_T", "XAUUSD"]  # gram altın, çeyrek, 22 ayar hurda, ons (USD)
 SAKLA_GUN = 400                     # en fazla ~13 aylık geçmiş tut
 TR = ZoneInfo("Europe/Istanbul")
 
@@ -38,7 +38,7 @@ def main():
     for k in KODLAR:
         kayit[k] = [sayi(by[k]["Alis"]), sayi(by[k]["Satis"])]
 
-    veri = {"kaynak": "Altınkaynak (static.altinkaynak.com/public/Gold)", "kodlar": {"GA": "Gram altın", "C": "Çeyrek altın", "B_T": "22 ayar hurda"}, "kayitlar": []}
+    veri = {"kaynak": "Altınkaynak (static.altinkaynak.com/public/Gold)", "kodlar": {"GA": "Gram altın", "C": "Çeyrek altın", "B_T": "22 ayar hurda", "XAUUSD": "Ons altın (USD)"}, "kayitlar": []}
     if os.path.exists(yol):
         veri = json.load(open(yol, encoding="utf-8"))
     kayitlar = veri["kayitlar"]
