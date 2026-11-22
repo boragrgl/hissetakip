@@ -20,13 +20,20 @@ Yanıtlar Türkçe. Kullanıcı: boragrgl. Commit author: `boragrgl <ibit_@hotma
 
 ## Site
 - Tasarım Apple tarzı: ortak stiller `site/stil.css`, ortak altın kodu `site/ortak.js`. Üst menü: Ana sayfa · Altın · Hisse Senetleri.
-- `site/index.html` sade ana sayfadır: üstte altın KPI'ları (sıra: çeyrek, gram, 22 ayar hurda), altta yalnız hisse özeti (kaç hisse geçiyor; alım adayı/koşullu/izleme sayıları). Grafik ana sayfada yok.
-- `site/altin.html` altın sayfası: KPI seçimi + seçili türün 1 aylık grafiği. KPI'ya tıklamak `altin.html#KOD` açar.
+- `site/index.html` ana sayfa: iki eşit kart. Solda "Altın fiyatları" tablosu (çeyrek, gram, 22 ayar hurda, ons; alış/satış/%), satıra tıklayınca `altin.html#KOD` açılır. Sağda en iyi 5 hisse (karar sırası, sonra potansiyel) ve özet satırı. Grafik ana sayfada yok, ok işaretleri yok.
+- `site/altin.html` altın ayrıntı sayfası: sol üstte tür adı, sağ üstte Çeyrek/Gram/Hurda/Ons seçici (varsayılan çeyrek). Alış/Satış(+%)/Yüksek/Düşük kutuları, düşük–yüksek çubuğu, 1 aylık grafik. Yüksek/düşük, son günün Altınkaynak kayıtlarından hesaplanır (servis vermiyor).
 - `site/hisseler.html` hisse senetleri ekranıdır (tüm ayrıntılar).
-- `src/worker.js` (Cloudflare Worker): `/api/altin` Altınkaynak'ın herkese açık servisinden (https://static.altinkaynak.com/public/Gold, bkz. altinkaynak.com/Araclar/Servisler) gram altın (GA), çeyrek (C) ve 22 ayar hurda (B_T) fiyatlarını 60 sn önbellekle döndürür.
+- `src/worker.js` (Cloudflare Worker): `/api/altin` Altınkaynak'ın herkese açık servisinden (https://static.altinkaynak.com/public/Gold, bkz. altinkaynak.com/Araclar/Servisler) gram altın (GA), çeyrek (C), 22 ayar hurda (B_T) ve ons (XAUUSD, $) fiyatlarını 60 sn önbellekle döndürür.
 - Altın grafiği `site/data/altin-gecmis.json` dosyasından çizilir. `.github/workflows/altin.yml` 08:07–23:07 TR arası saatlik kayıt ekler (`robot/altin_kaydet.py`). Altınkaynak'ın arşiv uç noktası (eb.altinkaynak.com) kendi uygulama anahtarıyla çalışır, kullanılmaz. Geçmiş bu yüzden kendi kayıtlarımızla birikir.
 - Geriye dönük kısım kullanıcının verdiği Excel dosyasından: `veri/Altin_Gunluk_Fiyatlar_01Eylul_21Kasim2026.xlsx` (1 Eylül – 21 Kasım 2026, günlük kapanış; 22 ayar hurda gösterge değeri). `robot/dosya_aktar.py` ile `kaynak: "dosya"` olarak eklenir. Alış yok, grafikte kesikli çizilir. Yeni bir dosya gelirse aynı betikle eklenir.
 - Yedek yol (şu an kullanılmıyor) TCMB EVDS: `robot/evds_aktar.py`, elle çalıştırılan `.github/workflows/evds.yml` (secret `EVDS_API_KEY`). EVDS serisi ilk gerçek Altınkaynak kaydına ölçeklenir ve `kaynak: "evds"` olarak işaretlenir. Grafikte kesikli çizilir ve "tahmini" diye gösterilir. Altınkaynak kayıtları ondan sonra saatlik devam eder.
+
+## Durum ve sıradaki işler (23.11.2026)
+- Canlı site: https://hissetakip.bybora.workers.dev (Cloudflare Workers, `main`'e push = yayın). Kullanıcı yeni tasarım değişikliklerini önce önizlemede görmek ister: değişikliği ayrı dalda yap, claude.ai artifact olarak göster ("Hisse Takip Önizleme"), onaydan sonra `main`'e al.
+- Zamanlanmış görev "BIST günlük temel analiz" (hafta içi 20:17 TR, kullanıcının bilgisayarında): repoyu klonlar, bu dosyadaki günlük akışı uygular, push eder, "borsa analizi" projesine `temel-analiz/sonuc.json` ve `son-rapor.md` yazar.
+- **Sıradaki iş: hisse fiyatını siteye girildiği anda güncellemek.** Karar: fiyat Google E-Tablolar'daki `GOOGLEFINANCE("IST:KOD";"price")` formülüyle alınacak. Tablo kullanıcının Google hesabında açılıp "web'de yayınla" ile CSV yapılacak. Worker bu CSV'yi okuyup F/K, PD/DD, hedef ve potansiyeli kayıtlı bilançoyla yeniden hesaplayacak. Dört madde fiyattan bağımsız. #N/A dönen hisselerde günlük İş Yatırım fiyatı kullanılır. Kullanıcı Google Drive bağlantısı ekleyebilir ya da tabloyu kendisi açar.
+- Elenen fiyat kaynakları: Fintables (koşullar scraping'i yasaklıyor), Bloomberg HT (robots piyasa verisi yollarını kapatıyor, veriler lisanslı), Google Finance sitesi (resmi API yok).
+- Bekleyen diğer işler: teknik analiz kuralları (kullanıcı verecek), yeni hisseler (`hisse-listesi.md`), altın grafiği için ileride 3 ay seçeneği.
 
 ## Teknik analiz (sonraki aşama)
 `sonuc.json` içindeki her hisseye şu alan eklenecek:
